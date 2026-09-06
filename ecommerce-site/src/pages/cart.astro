@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Shopping Cart - ShopHub">
+  <section class="page-header">
+    <div class="container">
+      <h1>Shopping Cart</h1>
+      <p>Review your items before checkout</p>
+    </div>
+  </section>
+
+  <section class="cart-section section">
+    <div class="container">
+      <div class="cart-layout">
+        <div class="cart-items" id="cartItems">
+          <!-- Cart items will be rendered by JavaScript -->
+          <p class="empty-cart">Your cart is empty</p>
+        </div>
+
+        <aside class="cart-summary card">
+          <h2>Order Summary</h2>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="cartSubtotal">$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="cartShipping">Calculated at checkout</span>
+          </div>
+          <div class="summary-row">
+            <span>Tax</span>
+            <span id="cartTax">$0.00</span>
+          </div>
+          <div class="summary-total">
+            <span>Total</span>
+            <span id="cartTotal">$0.00</span>
+          </div>
+          <button class="btn btn-primary btn-lg" style="width:100%;" onclick="alert('Proceeding to checkout...')">
+            Proceed to Checkout
+          </button>
+          <a href="/products" class="btn btn-outline" style="width:100%;margin-top:1rem;">
+            Continue Shopping
+          </a>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .cart-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3rem;
+  }
+  
+  .cart-items {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+  }
+  
+  .empty-cart {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 3rem;
+  }
+  
+  .cart-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .cart-item:last-child {
+    border-bottom: none;
+  }
+  
+  .cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+  
+  .cart-item-info {
+    flex: 1;
+  }
+  
+  .cart-item-info h4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .quantity-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    border: none;
+    cursor: pointer;
+  }
+  
+  .remove-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--danger-color);
+    cursor: pointer;
+  }
+  
+  .cart-summary {
+    padding: 2rem;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+  }
+  
+  .cart-summary h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    color: var(--text-secondary);
+  }
+  
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+    margin-top: 1rem;
+    border-top: 2px solid var(--border-color);
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+  
+  @media (max-width: 1024px) {
+    .cart-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .cart-summary {
+      position: static;
+    }
+  }
+</style>
