@@ -1,0 +1,17 @@
+{
+  "name": "ecommerce-site",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Modern E-commerce Website built with Astro",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "keywords": ["ecommerce", "astro", "shop"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "astro": "^7.3.1"
+  }
+}

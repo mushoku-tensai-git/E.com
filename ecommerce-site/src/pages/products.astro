@@ -1,0 +1,229 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { products, categories } from '../data/products.js';
+---
+
+<BaseLayout title="Products - ShopHub">
+  <section class="page-header">
+    <div class="container">
+      <h1>All Products</h1>
+      <p>Browse our complete collection of premium products</p>
+    </div>
+  </section>
+
+  <section class="products-section section">
+    <div class="container">
+      <div class="products-layout">
+        <aside class="filters-sidebar">
+          <div class="filter-group">
+            <h3>Categories</h3>
+            <ul class="filter-list">
+              {categories.map(cat => (
+                <li>
+                  <a href={`#${cat.name.toLowerCase()}`}>{cat.name} ({cat.count})</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          <div class="filter-group">
+            <h3>Price Range</h3>
+            <div class="price-filter">
+              <input type="range" min="0" max="500" value="500" class="price-slider" />
+              <div class="price-values">
+                <span>$0</span>
+                <span>$500+</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <h3>Rating</h3>
+            <label class="checkbox-label">
+              <input type="checkbox" /> 4★ & above
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" /> 3★ & above
+            </label>
+          </div>
+        </aside>
+
+        <div class="products-main">
+          <div class="products-toolbar">
+            <p class="products-count">{products.length} products</p>
+            <select class="sort-select">
+              <option>Sort by: Featured</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+              <option>Newest First</option>
+              <option>Best Rating</option>
+            </select>
+          </div>
+
+          <div class="grid grid-3 product-grid">
+            {products.map(product => (
+              <article class="product-card card">
+                <div class="product-image">
+                  <img src={product.image} alt={product.name} loading="lazy" />
+                  {product.badge && <span class={`badge badge-${product.badge}`}>{product.badge}</span>}
+                  {!product.inStock && <span class="badge badge-sale">Out of Stock</span>}
+                  <div class="product-actions">
+                    <button class="action-btn" onclick={`addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})`}>🛒</button>
+                    <a href={`/products/${product.id}`} class="action-btn">👁️</a>
+                  </div>
+                </div>
+                <div class="product-info">
+                  <span class="product-category">{product.category}</span>
+                  <h3 class="product-name">{product.name}</h3>
+                  <div class="product-rating rating">
+                    <span class="rating-stars">{'★'.repeat(Math.floor(product.rating))}</span>
+                    <span>({product.reviews} reviews)</span>
+                  </div>
+                  <div class="product-price">
+                    <span class="price">${product.price.toFixed(2)}</span>
+                    {product.originalPrice && <span class="price-original">${product.originalPrice.toFixed(2)}</span>}
+                  </div>
+                  {product.inStock ? (
+                    <button class="add-to-cart-btn btn btn-primary btn-sm" style="width:100%;margin-top:1rem;" 
+                      onclick={`addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})`}>
+                      Add to Cart
+                    </button>
+                  ) : (
+                    <button class="add-to-cart-btn btn btn-secondary btn-sm" style="width:100%;margin-top:1rem;" disabled>
+                      Out of Stock
+                    </button>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    padding: 4rem 0;
+    text-align: center;
+  }
+  
+  .page-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .page-header p {
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+  }
+  
+  .products-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+  }
+  
+  .filters-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+  }
+  
+  .filter-group {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .filter-group:last-child {
+    border-bottom: none;
+  }
+  
+  .filter-group h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+  
+  .filter-list {
+    list-style: none;
+  }
+  
+  .filter-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .filter-list a {
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+  
+  .filter-list a:hover {
+    color: var(--primary-color);
+  }
+  
+  .price-slider {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .price-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--text-light);
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+  }
+  
+  .products-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .products-count {
+    color: var(--text-secondary);
+  }
+  
+  .sort-select {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+  }
+  
+  @media (max-width: 1024px) {
+    .products-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .filters-sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .filters-sidebar {
+      grid-template-columns: 1fr;
+    }
+    
+    .page-header h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

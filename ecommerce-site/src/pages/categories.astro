@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { categories, getProductsByCategory } from '../data/products.js';
+---
+
+<BaseLayout title="Categories - ShopHub">
+  <section class="page-header">
+    <div class="container">
+      <h1>Shop by Category</h1>
+      <p>Browse products by category</p>
+    </div>
+  </section>
+
+  <section class="categories-section section">
+    <div class="container">
+      <div class="category-list">
+        {categories.filter(cat => cat.name !== 'All').map(category => (
+          <div class="category-section" id={category.name.toLowerCase()}>
+            <h2>{category}</h2>
+            <p class="category-count">{category.count} products</p>
+            <div class="grid grid-4 product-grid">
+              {getProductsByCategory(category.name).map(product => (
+                <article class="product-card card">
+                  <div class="product-image">
+                    <img src={product.image} alt={product.name} loading="lazy" />
+                    {product.badge && <span class={`badge badge-${product.badge}`}>{product.badge}</span>}
+                    <div class="product-actions">
+                      <button class="action-btn" onclick={`addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})`}>🛒</button>
+                      <a href={`/products/${product.id}`} class="action-btn">👁️</a>
+                    </div>
+                  </div>
+                  <div class="product-info">
+                    <span class="product-category">{product.category}</span>
+                    <h3 class="product-name">{product.name}</h3>
+                    <div class="product-rating rating">
+                      <span class="rating-stars">{'★'.repeat(Math.floor(product.rating))}</span>
+                      <span>({product.reviews})</span>
+                    </div>
+                    <div class="product-price">
+                      <span class="price">${product.price.toFixed(2)}</span>
+                      {product.originalPrice && <span class="price-original">${product.originalPrice.toFixed(2)}</span>}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .category-section {
+    margin-bottom: 4rem;
+  }
+  
+  .category-section h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    display: inline-block;
+  }
+  
+  .category-count {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+</style>
